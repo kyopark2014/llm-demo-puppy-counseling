@@ -83,9 +83,6 @@ def get_chat(profile_of_LLMs, selected_LLM):
     return chat
 
 def generate_greeting_message(chat, img_base64, query):    
-    if query == "":
-        query = "그림에 대해 상세히 설명해줘."
-    
     messages = [
         SystemMessage(content="답변은 50자 이내의 한국어로 해주세요."),
         HumanMessage(
@@ -104,10 +101,9 @@ def generate_greeting_message(chat, img_base64, query):
     ]
     
     try: 
-        result = chat.invoke(messages)
-        
+        result = chat.invoke(messages)        
         msg = result.content
-        print('result of code summarization: ', msg)
+
     except Exception:
         err_msg = traceback.format_exc()
         print('error message: ', err_msg)                    
@@ -175,7 +171,7 @@ def lambda_handler(event, context):
     # extract text from the image
     chat = get_chat(profile_of_LLMs, selected_LLM)
     
-    query = "그림에 있는 사람이 기분좋아질 수 있는 적절한 인사말을 해주세요."
+    query = "그림에 있는 사람이 기분좋아지게하는 인사말을 추천세요."
     msg = generate_greeting_message(chat, img_base64, query)     
     print('msg: ', msg)  
     
@@ -185,5 +181,5 @@ def lambda_handler(event, context):
     
     return {
         'statusCode': 200,
-        #'msg': msg
+        'msg': "안녕하세요"
     }
