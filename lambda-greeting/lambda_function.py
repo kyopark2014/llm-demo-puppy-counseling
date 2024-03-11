@@ -183,49 +183,6 @@ def lambda_handler(event, context):
     extracted_text = text[text.find('<result>')+8:len(text)-9] # remove <result> tag
     print('extracted_text: ', extracted_text)
     
-    #if len(extracted_text)>10:
-    #msg = f"\n\n[추출된 Text]\n{extracted_text}\n"    
-    #print('msg:', msg)
-    
-    """
-    header = event['multiValueHeaders']
-    
-    
-    if 'content-type' in header:
-        contentType = header['content-type']
-    elif 'Content-Type' in header:
-        contentType = header['Content-Type']
-    print('contentType: ', contentType) 
-    
-    userId = uuid.uuid4()
-    print('userId: ', userId)
-    
-    key = 'profile/'+userId+'.png'
-    """
-    
-    
-    
-    """    
-    chat = get_chat(profile_of_LLMs, selected_LLM)
-    
-    start = int(time.time())    
-    
-    msg = create_greeting_message(chat, img_base64)
-            
-    elapsed_time = int(time.time()) - start
-    print("total run time(sec): ", str(elapsed_time))
-        
-    print('msg: ', msg)
-    speech_uri = get_text_speech(speech_prefix, bucket, msg)
-    
-    return {
-        'statusCode': 200,
-        'request_id': requestId,
-        'msg': msg,
-        'speech_uri': speech_uri
-    }
-    """
-    
     return {
         'statusCode': 200,
         'msg': msg
