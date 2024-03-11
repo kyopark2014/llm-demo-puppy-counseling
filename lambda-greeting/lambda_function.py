@@ -9,6 +9,8 @@ import uuid
 from langchain.prompts import PromptTemplate
 from langchain.llms.bedrock import Bedrock
 from botocore.config import Config
+from PIL import Image
+from io import BytesIO
 from urllib import parse
 import traceback
 from langchain.callbacks.streaming_stdout import StreamingStdOutCallbackHandler
@@ -80,12 +82,76 @@ def get_chat(profile_of_LLMs, selected_LLM):
     
     return chat
 
+def extract_text(chat, img_base64):    
+    query = "텍스트를 추출해서 utf8로 변환하세요. <result> tag를 붙여주세요."
+    
+    messages = [
+        HumanMessage(
+            content=[
+                {
+                    "type": "image_url",
+                    "image_url": {
+                        "url": f"data:image/png;base64,{img_base64}", 
+                    },
+                },
+                {
+                    "type": "text", "text": query
+                },
+            ]
+        )
+    ]
+    
+    try: 
+        result = chat.invoke(messages)
+        
+        extracted_text = result.content
+        print('result of text extraction from an image: ', extracted_text)
+    except Exception:
+        err_msg = traceback.format_exc()
+        print('error message: ', err_msg)                    
+        raise Exception ("Not able to request to LLM")
+    
+    return extracted_text
     
 def lambda_handler(event, context):
     print(event)
     
-    body = base64.b64decode(event["body"])
+    image_content = event["body"]
+    
+    img = Image.open(BytesIO(image_content))
+    
+    width, height = img.size 
+    print(f"width: {width}, height: {height}, size: {width*height}")
+    
+    isResized = False
+    while(width*height > 5242880):                    
+        width = int(width/2)
+        height = int(height/2)
+        isResized = True
+    print(f"width: {width}, height: {height}, size: {width*height}")
+    
+    if isResized:
+        img = img.resize((width, height))
+                
+    buffer = BytesIO()
+    img.save(buffer, format="PNG")
+    img_base64 = base64.b64encode(buffer.getvalue()).decode("utf-8")
+    
+    # extract text from the image
+    chat = get_chat(profile_of_LLMs, selected_LLM)
+    
+    text = extract_text(chat, img_base64)
+    extracted_text = text[text.find('<result>')+8:len(text)-9] # remove <result> tag
+    print('extracted_text: ', extracted_text)
+    
+    #if len(extracted_text)>10:
+    msg = msg + f"\n\n[추출된 Text]\n{extracted_text}\n"
+    
+    print('msg: msg')
+    
+    """
     header = event['multiValueHeaders']
+    
     
     if 'content-type' in header:
         contentType = header['content-type']
@@ -97,12 +163,7 @@ def lambda_handler(event, context):
     print('userId: ', userId)
     
     key = 'profile/'+userId+'.png'
-    
-    try:
-        with open('/', 'rb') as path:
-            s3.upload_fileobj(path, bucket, key)
-    except Exception as e:
-        print('error:', e)
+    """
     
     
     

@@ -64,12 +64,38 @@ function emotion() {
 
     console.log('event for emotion');
 
-    getEmotion();
+    //getEmotion();
+    makeGreetingMessage();
+}
+
+function makeGreetingMessage() {
+    const uri = "greeting";
+    const xhr = new XMLHttpRequest();
+
+    xhr.open("POST", uri, true);
+
+    xhr.onreadystatechange = () => {
+        if (xhr.readyState === 4 && xhr.status === 200) {
+            let response = JSON.parse(xhr.responseText);
+            console.log("response: " + JSON.stringify(response));
+        }
+        else {
+            profileInfo_emotion.innerHTML = `<h3>No Face</h3>`
+            profileInfo_age.innerHTML = ``
+            // profileInfo_features.innerHTML = ""
+        }
+    };
+    
+    // console.log('uuid: ', uuid);
+
+    canvas.toBlob(function (blob) {
+        xhr.send(blob);
+    });
 }
 
 function getEmotion() {
     // const uri = cloudfrntUrl + "emotion";
-    const uri = "emotion";
+    const uri = "greeting";
     const xhr = new XMLHttpRequest();
 
     xhr.open("POST", uri, true);
