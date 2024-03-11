@@ -179,9 +179,9 @@ def lambda_handler(event, context):
     msg = generate_greeting_message(chat, img_base64, query)     
     print('msg: ', msg)  
     
-    text = extract_text(chat, img_base64)
-    extracted_text = text[text.find('<result>')+8:len(text)-9] # remove <result> tag
-    print('extracted_text: ', extracted_text)
+    #text = extract_text(chat, img_base64)
+    #extracted_text = text[text.find('<result>')+8:len(text)-9] # remove <result> tag
+    #print('extracted_text: ', extracted_text)
     
     return {
         'statusCode': 200,
