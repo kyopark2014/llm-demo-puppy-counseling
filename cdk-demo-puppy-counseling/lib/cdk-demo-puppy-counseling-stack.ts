@@ -139,7 +139,7 @@ export class CdkDemoPuppyCounselingStack extends cdk.Stack {
         integrationResponses: [{
             statusCode: '200',
         }],
-        proxy: false,
+        proxy: true,
     }), {
         methodResponses: [
             {
