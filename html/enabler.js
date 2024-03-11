@@ -92,7 +92,7 @@ function makeGreetingMessage() {
     canvas.toBlob(function (blob) {
         // var blob = new Blob([JSON.stringify(requestObj)], {type: 'application/json'});
         xhr.send(blob);
-    }, {type: 'application/json'});
+    }, {type: 'image/png'});
 }
 
 function getEmotion() {
