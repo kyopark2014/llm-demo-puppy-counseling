@@ -118,7 +118,9 @@ def lambda_handler(event, context):
     
     image_content = event["body"]
     
-    img = Image.open(image_content)
+    #img = Image.open(BytesIO(image_content))
+    
+    img = Image.open(BytesIO(base64.b64decode(image_content)))
     
     width, height = img.size 
     print(f"width: {width}, height: {height}, size: {width*height}")
