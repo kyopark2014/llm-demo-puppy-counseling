@@ -147,7 +147,7 @@ def lambda_handler(event, context):
     print('extracted_text: ', extracted_text)
     
     #if len(extracted_text)>10:
-    msg = msg + f"\n\n[추출된 Text]\n{extracted_text}\n"
+    msg = f"\n\n[추출된 Text]\n{extracted_text}\n"
     
     print('msg: msg')
     
@@ -192,4 +192,5 @@ def lambda_handler(event, context):
     
     return {
         'statusCode': 200,
+        'msg': msg
     }
