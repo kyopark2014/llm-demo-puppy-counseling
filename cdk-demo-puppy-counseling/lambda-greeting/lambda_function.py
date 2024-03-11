@@ -4,6 +4,8 @@ import time
 import re
 import base64
 import boto3
+import uuid
+
 from langchain.prompts import PromptTemplate
 from langchain.llms.bedrock import Bedrock
 from botocore.config import Config
@@ -91,6 +93,16 @@ def lambda_handler(event, context):
         contentType = header['Content-Type']
     print('contentType: ', contentType) 
     
+    userId = uuid.uuid4()
+    print('userId: ', userId)
+    
+    key = 'profile/'+userId+'.png'
+    
+    try:
+        with open('/', 'rb') as path:
+            s3.upload_fileobj(path, bucket, key)
+    except Exception as e:
+        print('error:', e)
     
     
     
