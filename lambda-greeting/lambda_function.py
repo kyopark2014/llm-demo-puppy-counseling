@@ -84,7 +84,7 @@ def get_chat(profile_of_LLMs, selected_LLM):
 
 def generate_greeting_message(chat, img_base64, query):    
     messages = [
-        SystemMessage(content="답변은 50자 이내의 한국어로 해주세요."),
+        SystemMessage(content="답변은 50자 이내의 한국어로 해주세요. <result> tag를 붙여주세요."),
         HumanMessage(
             content=[
                 {
