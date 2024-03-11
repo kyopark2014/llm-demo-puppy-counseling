@@ -114,11 +114,11 @@ def extract_text(chat, img_base64):
     return extracted_text
     
 def lambda_handler(event, context):
-    print(event)
+    # print(event)
     
     image_content = event["body"]
     
-    img = Image.open(BytesIO(image_content))
+    img = Image.open(image_content)
     
     width, height = img.size 
     print(f"width: {width}, height: {height}, size: {width*height}")
