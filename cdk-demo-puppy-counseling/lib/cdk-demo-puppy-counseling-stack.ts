@@ -120,7 +120,7 @@ export class CdkDemoPuppyCounselingStack extends cdk.Stack {
       },
     });
 
-    const lambdaGreeting= new lambda.Function(this, `lambda-greeting-for-${projectName}`, {
+  /*  const lambdaGreeting= new lambda.Function(this, `lambda-greeting-for-${projectName}`, {
       description: 'lambda for greeting message',
       functionName: `lambda-greeting-${projectName}`,
       handler: 'lambda_function.lambda_handler',
@@ -129,7 +129,43 @@ export class CdkDemoPuppyCounselingStack extends cdk.Stack {
       timeout: cdk.Duration.seconds(30),
       environment: {
       }
+    }); */
+
+    const roleLambda = new iam.Role(this, `role-lambda-chat-for-${projectName}`, {
+      roleName: `role-lambda-chat-for-${projectName}-${region}`,
+      assumedBy: new iam.CompositePrincipal(
+        new iam.ServicePrincipal("lambda.amazonaws.com"),
+        new iam.ServicePrincipal("bedrock.amazonaws.com"),
+      )
     });
+    roleLambda.addManagedPolicy({
+      managedPolicyArn: 'arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole',
+    });
+    const BedrockPolicy = new iam.PolicyStatement({  // policy statement for sagemaker
+      resources: ['*'],
+      actions: ['bedrock:*'],
+    });        
+    roleLambda.attachInlinePolicy( // add bedrock policy
+      new iam.Policy(this, `bedrock-policy-lambda-chat-for-${projectName}`, {
+        statements: [BedrockPolicy],
+      }),
+    );      
+
+    new cdk.CfnOutput(this, 'Enabler', {
+      value: 'https://' + distribution.domainName + '/enabler.html',
+      description: 'url of enabler',
+    });     
+    
+    const lambdaGreeting = new lambda.DockerImageFunction(this, `lambda-greeting-for-${projectName}`, {
+      description: 'lambda for greeting',
+      functionName: `lambda-greeting-for-${projectName}`,
+      code: lambda.DockerImageCode.fromImageAsset(path.join(__dirname, '../../lambda-greeting')),
+      timeout: cdk.Duration.seconds(300),
+      memorySize: 8192,
+      role: roleLambda,
+      environment: {
+      }
+    });     
   
     // POST method - greeting
     const greeting_info = api.root.addResource("greeting");
@@ -168,30 +204,6 @@ export class CdkDemoPuppyCounselingStack extends cdk.Stack {
       }),
     );    
 
-    const roleLambda = new iam.Role(this, `role-lambda-chat-for-${projectName}`, {
-      roleName: `role-lambda-chat-for-${projectName}-${region}`,
-      assumedBy: new iam.CompositePrincipal(
-        new iam.ServicePrincipal("lambda.amazonaws.com"),
-        new iam.ServicePrincipal("bedrock.amazonaws.com"),
-      )
-    });
-    roleLambda.addManagedPolicy({
-      managedPolicyArn: 'arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole',
-    });
-    const BedrockPolicy = new iam.PolicyStatement({  // policy statement for sagemaker
-      resources: ['*'],
-      actions: ['bedrock:*'],
-    });        
-    roleLambda.attachInlinePolicy( // add bedrock policy
-      new iam.Policy(this, `bedrock-policy-lambda-chat-for-${projectName}`, {
-        statements: [BedrockPolicy],
-      }),
-    );      
-
-    new cdk.CfnOutput(this, 'Enabler', {
-      value: 'https://' + distribution.domainName + '/enabler.html',
-      description: 'url of enabler',
-    });     
-
+    
   }
 }
