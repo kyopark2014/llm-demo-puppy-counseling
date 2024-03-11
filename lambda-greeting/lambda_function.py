@@ -175,7 +175,7 @@ def lambda_handler(event, context):
     # extract text from the image
     chat = get_chat(profile_of_LLMs, selected_LLM)
     
-    query = "그림에 있는 사람의 감정과 옷차림에 맞추어 적절한 인사말을 해주세요."
+    query = "그림에 있는 사람이 기분좋아질 수 있는 적절한 인사말을 해주세요."
     msg = generate_greeting_message(chat, img_base64, query)     
     print('msg: ', msg)  
     
@@ -185,5 +185,5 @@ def lambda_handler(event, context):
     
     return {
         'statusCode': 200,
-        'msg': msg
+        #'msg': msg
     }
