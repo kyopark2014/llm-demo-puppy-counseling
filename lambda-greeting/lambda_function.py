@@ -109,7 +109,7 @@ def generate_greeting_message(chat, img_base64, query):
         print('error message: ', err_msg)                    
         raise Exception ("Not able to request to LLM")
     
-    return msg
+    return msg[msg.find('<result>')+8:len(msg)-9] # remove <result> tag
 
 def extract_text(chat, img_base64):    
     query = "텍스트를 추출해서 utf8 형태의 한국어로 답변하세요. <result> tag를 붙여주세요."
