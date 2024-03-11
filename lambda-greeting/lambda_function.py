@@ -116,7 +116,7 @@ def generate_greeting_message(chat, img_base64, query):
     return msg
 
 def extract_text(chat, img_base64):    
-    query = "텍스트를 추출해서 utf8로 변환하세요. <result> tag를 붙여주세요."
+    query = "텍스트를 추출해서 utf8 형태의 한국어로 답변하세요. <result> tag를 붙여주세요."
     
     messages = [
         HumanMessage(
