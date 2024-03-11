@@ -87,7 +87,7 @@ def generate_greeting_message(chat, img_base64, query):
         query = "그림에 대해 상세히 설명해줘."
     
     messages = [
-        SystemMessage(content="답변은 500자 이내의 한국어로 설명해주세요."),
+        SystemMessage(content="답변은 50자 이내의 한국어로 해주세요."),
         HumanMessage(
             content=[
                 {
