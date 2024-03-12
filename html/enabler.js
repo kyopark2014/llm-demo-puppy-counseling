@@ -75,6 +75,8 @@ function makeGreetingMessage() {
     xhr.open("POST", uri, true);
 
     xhr.onreadystatechange = () => {
+        console.log("readyState: " + xhr.readyState);
+        console.log("status: " + xhr.status);
         if (xhr.readyState === 4 && xhr.status === 200) {
             // console.log("response: " + xhr.responseText);
             let response = xhr.responseText;
