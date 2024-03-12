@@ -73,8 +73,11 @@ function makeGreetingMessage() {
 
     xhr.onreadystatechange = () => {
         if (xhr.readyState === 4 && xhr.status === 200) {
-            let response = xhr.responseText;            
-            console.log("response: " + response);
+            let msg = xhr.responseText;            
+            console.log("msg: " + msg);
+
+            requestId = uuidv4();
+            addReceivedMessage(requestId, msg);   
         }
         else {
             console.log("response: " + xhr.responseText);
