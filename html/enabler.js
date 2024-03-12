@@ -77,22 +77,17 @@ function makeGreetingMessage() {
     xhr.onreadystatechange = () => {
         console.log("readyState: " + xhr.readyState);
         console.log("status: " + xhr.status);
-        if (xhr.readyState === 4 && xhr.status === 200) {
+        if (xhr.readyState === 3 && xhr.status === 200) {
             // console.log("response: " + xhr.responseText);
             let response = xhr.responseText;
-            // console.log("response: " + JSON.stringify(response));
-
+            
             profileInfo_emotion.innerHTML = `<h5>${response}</h5>`
+
+            console.log("response: " + response);
         }
         else {
-            let response = xhr.responseText;
-            console.log("response: " + response);
-
-            profileInfo_emotion.innerHTML = `<h5>${response}</h5>`
-
-            // profileInfo_emotion.innerHTML = `<h3>No Face</h3>`
-            // profileInfo_age.innerHTML = ``
-            // profileInfo_features.innerHTML = ""
+            profileInfo_emotion.innerHTML = `<h3>No Face</h3>`
+            profileInfo_age.innerHTML = ``
 
             console.log("response: " + xhr.responseText);
         }
