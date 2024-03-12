@@ -154,22 +154,24 @@ export class CdkDemoPuppyCounselingStack extends cdk.Stack {
     new cdk.CfnOutput(this, 'Enabler', {
       value: 'https://' + distribution.domainName + '/enabler.html',
       description: 'url of enabler',
-    });     
+    }); 
+    
+    
+
     
     const lambdaGreeting = new lambda.DockerImageFunction(this, `lambda-greeting-for-${projectName}`, {
       description: 'lambda for greeting',
       functionName: `lambda-greeting-for-${projectName}`,
       code: lambda.DockerImageCode.fromImageAsset(path.join(__dirname, '../../lambda-greeting')),
-      timeout: cdk.Duration.seconds(300),
-      memorySize: 8192,
+      timeout: cdk.Duration.seconds(60),
       role: roleLambda,
       environment: {
       }
     });     
   
     // POST method - greeting
-    const greeting_info = api.root.addResource("greeting");
-    greeting_info.addMethod('POST', new apiGateway.LambdaIntegration(lambdaGreeting, {
+    const greeting = api.root.addResource("greeting");
+    greeting.addMethod('POST', new apiGateway.LambdaIntegration(lambdaGreeting, {
         passthroughBehavior: apiGateway.PassthroughBehavior.WHEN_NO_TEMPLATES,
         credentialsRole: role,
         integrationResponses: [{

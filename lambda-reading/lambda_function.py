@@ -82,35 +82,6 @@ def get_chat(profile_of_LLMs, selected_LLM):
     
     return chat
 
-def generate_greeting_message(chat, img_base64, query):    
-    messages = [
-        SystemMessage(content="답변은 50자 이내의 한국어로 해주세요. <result> tag를 붙여주세요."),
-        HumanMessage(
-            content=[
-                {
-                    "type": "image_url",
-                    "image_url": {
-                        "url": f"data:image/png;base64,{img_base64}", 
-                    },
-                },
-                {
-                    "type": "text", "text": query
-                },
-            ]
-        )
-    ]
-    
-    try: 
-        result = chat.invoke(messages)        
-        msg = result.content
-
-    except Exception:
-        err_msg = traceback.format_exc()
-        print('error message: ', err_msg)                    
-        raise Exception ("Not able to request to LLM")
-    
-    return msg[msg.find('<result>')+8:len(msg)-9] # remove <result> tag
-
 def extract_text(chat, img_base64):    
     query = "텍스트를 추출해서 utf8 형태의 한국어로 답변하세요. <result> tag를 붙여주세요."
     
@@ -145,7 +116,8 @@ def extract_text(chat, img_base64):
 def lambda_handler(event, context):
     # print(event)
     
-    image_content = event["body"]    
+    image_content = event["body"]
+    
     img = Image.open(BytesIO(base64.b64decode(image_content)))
     
     width, height = img.size 
@@ -165,13 +137,14 @@ def lambda_handler(event, context):
     img.save(buffer, format="PNG")
     img_base64 = base64.b64encode(buffer.getvalue()).decode("utf-8")
     
-    # creating greeting message
-    chat = get_chat(profile_of_LLMs, selected_LLM)    
-    query = "그림에 있는 사람이 기분 좋아지는 멋진 인사말을 해주세요."
-    msg = generate_greeting_message(chat, img_base64, query)     
-    print('greeting msg: ', msg)  
-
+    # extract text from the image
+    chat = get_chat(profile_of_LLMs, selected_LLM)
+    
+    text = extract_text(chat, img_base64)
+    extracted_text = text[text.find('<result>')+8:len(text)-9] # remove <result> tag
+    print('extracted_text: ', extracted_text)
+    
     return {
         'statusCode': 200,
-        'msg': msg
+        'text': text
     }
