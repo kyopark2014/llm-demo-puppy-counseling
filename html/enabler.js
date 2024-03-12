@@ -77,8 +77,10 @@ function makeGreetingMessage() {
     xhr.onreadystatechange = () => {
         if (xhr.readyState === 4 && xhr.status === 200) {
             // console.log("response: " + xhr.responseText);
-            let response = JSON.parse(xhr.responseText);
-            console.log("response: " + JSON.stringify(response));
+            let response = xhr.responseText;
+            // console.log("response: " + JSON.stringify(response));
+
+            profileInfo_emotion.innerHTML = `<h5>${response}</h5>`
         }
         else {
             profileInfo_emotion.innerHTML = `<h3>No Face</h3>`
