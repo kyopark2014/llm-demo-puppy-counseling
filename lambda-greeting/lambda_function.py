@@ -146,10 +146,11 @@ def lambda_handler(event, context):
     # print(event)
     
     return {
+        "isBase64Encoded": False,
         'statusCode': 200,
-        'msg': "hi hello"
+        'body': "hi hello"
     }
-    
+
 """
     image_content = event["body"]    
     img = Image.open(BytesIO(base64.b64decode(image_content)))
