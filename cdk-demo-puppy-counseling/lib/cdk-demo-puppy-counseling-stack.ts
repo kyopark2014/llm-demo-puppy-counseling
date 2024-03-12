@@ -82,6 +82,11 @@ export class CdkDemoPuppyCounselingStack extends cdk.Stack {
       description: 'The domain name of the Distribution',
     });
 
+    new cdk.CfnOutput(this, 'Enabler', {
+      value: 'https://' + distribution.domainName + '/enabler.html',
+      description: 'url of enabler',
+    }); 
+
     // collection of rekognition
     const collectionId = `collectionId-for-${projectName}`;
     const cfnCollection = new rekognition.CfnCollection(this, 'MyCfnCollection', {
@@ -151,10 +156,7 @@ export class CdkDemoPuppyCounselingStack extends cdk.Stack {
       }),
     );      
 
-    new cdk.CfnOutput(this, 'Enabler', {
-      value: 'https://' + distribution.domainName + '/enabler.html',
-      description: 'url of enabler',
-    }); 
+    
     
     
 
@@ -177,7 +179,7 @@ export class CdkDemoPuppyCounselingStack extends cdk.Stack {
         integrationResponses: [{
             statusCode: '200',
         }],
-        proxy: true,
+        proxy: false,
     }), {
         methodResponses: [
             {
