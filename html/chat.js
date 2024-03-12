@@ -22,7 +22,6 @@ let previewlist = [];
 let fileList = [];
 const maxImgItems = 1;
 let drawingIndex = 0;
-// let uuid = uuidv4();
 let emotionValue;
 let generation;
 let gender;
