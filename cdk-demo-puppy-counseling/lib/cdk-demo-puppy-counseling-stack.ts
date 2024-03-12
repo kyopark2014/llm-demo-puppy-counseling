@@ -156,11 +156,6 @@ export class CdkDemoPuppyCounselingStack extends cdk.Stack {
       }),
     );      
 
-    
-    
-    
-
-    
     const lambdaGreeting = new lambda.DockerImageFunction(this, `lambda-greeting-for-${projectName}`, {
       description: 'lambda for greeting',
       functionName: `lambda-greeting-for-${projectName}`,

@@ -145,6 +145,12 @@ def extract_text(chat, img_base64):
 def lambda_handler(event, context):
     # print(event)
     
+    return {
+        'statusCode': 200,
+        'msg': "hi hello"
+    }
+    
+"""
     image_content = event["body"]    
     img = Image.open(BytesIO(base64.b64decode(image_content)))
     
@@ -175,3 +181,4 @@ def lambda_handler(event, context):
         'statusCode': 200,
         'msg': msg
     }
+"""
