@@ -83,8 +83,13 @@ function makeGreetingMessage() {
             profileInfo_emotion.innerHTML = `<h5>${response}</h5>`
         }
         else {
-            profileInfo_emotion.innerHTML = `<h3>No Face</h3>`
-            profileInfo_age.innerHTML = ``
+            let response = xhr.responseText;
+            console.log("response: " + response);
+
+            profileInfo_emotion.innerHTML = `<h5>${response}</h5>`
+
+            // profileInfo_emotion.innerHTML = `<h3>No Face</h3>`
+            // profileInfo_age.innerHTML = ``
             // profileInfo_features.innerHTML = ""
 
             console.log("response: " + xhr.responseText);
