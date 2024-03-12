@@ -6,8 +6,6 @@ import base64
 import boto3
 import uuid
 
-from langchain.prompts import PromptTemplate
-from langchain.llms.bedrock import Bedrock
 from botocore.config import Config
 from PIL import Image
 from io import BytesIO
@@ -145,13 +143,6 @@ def extract_text(chat, img_base64):
 def lambda_handler(event, context):
     # print(event)
     
-    return {
-        "isBase64Encoded": False,
-        'statusCode': 200,
-        'body': "hi hello"
-    }
-
-"""
     image_content = event["body"]    
     img = Image.open(BytesIO(base64.b64decode(image_content)))
     
@@ -179,7 +170,7 @@ def lambda_handler(event, context):
     print('greeting msg: ', msg)  
 
     return {
+        "isBase64Encoded": False,
         'statusCode': 200,
-        'msg': msg
+        'body': msg
     }
-"""
